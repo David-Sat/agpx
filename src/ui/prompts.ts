@@ -2,8 +2,8 @@ import * as p from "@clack/prompts";
 import pc from "picocolors";
 import type { AgentHarness, DiscoveredPlugin, EnvVarDefinition } from "../types.js";
 
-export function displayBanner(version: string = "1.0.0"): void {
-  p.intro(pc.bgCyan(pc.black(` agpx v${version} `)));
+export function displayBanner(version: string = "0.3.1"): void {
+  p.intro(pc.bgCyan(pc.black(` agentpx v${version} `)));
 }
 
 export function displayPluginSummary(plugin: DiscoveredPlugin, source: string): void {
