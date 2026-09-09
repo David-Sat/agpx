@@ -3,7 +3,6 @@ name: Release & Publish
 on:
   push:
     branches:
-      - master
       - main
   release:
     types: [published]
@@ -25,13 +24,13 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # When a release PR is merged, or manually triggered, publish to npm
+      # When a release PR is merged, publish to npm
       - name: Checkout repository
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -39,19 +38,19 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created }}
         run: npm ci
 
       - name: Build package
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created }}
         run: npm run build
 
       - name: Run tests
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created }}
         run: npm test
 
       - name: Publish to npm with Provenance
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created }}
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
