@@ -4,9 +4,9 @@
   "description": "Universal AI agent plugin installer bridging skills, MCP servers, and harnesses",
   "type": "module",
   "bin": {
-    "agpx": "./bin/cli.mjs",
-    "agp": "./bin/cli.mjs",
-    "agent-plugins": "./bin/cli.mjs"
+    "agpx": "bin/cli.mjs",
+    "agp": "bin/cli.mjs",
+    "agent-plugins": "bin/cli.mjs"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
