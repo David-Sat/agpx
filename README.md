@@ -1,12 +1,12 @@
-# agpx
+# agentpx
 
-agpx installs prompt skills (`SKILL.md`), Model Context Protocol ([MCP](https://modelcontextprotocol.io/)) servers, and environment variables across coding agents.
+`agentpx` installs prompt skills (`SKILL.md`), Model Context Protocol ([MCP](https://modelcontextprotocol.io/)) servers, and environment variables across coding agents.
 
-[![NPM Version](https://img.shields.io/npm/v/agpx.svg)](https://www.npmjs.com/package/agpx)
+[![NPM Version](https://img.shields.io/npm/v/agentpx.svg)](https://www.npmjs.com/package/agentpx)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ```bash
-npx agpx add <github-repo>
+npx agentpx add <github-repo>
 ```
 
 ---
@@ -25,27 +25,12 @@ Prompt managers like [`skills`](https://www.npmjs.com/package/skills) copy markd
 
 ## Supported Agents
 
-| Agent | Detection | MCP config | Skills directory |
-| :--- | :--- | :--- | :--- |
-| Google Antigravity | `~/.gemini/` | `~/.gemini/config/mcp_config.json` | `~/.gemini/config/plugins/<name>/` |
-| Claude Code | `~/.claude/` | `~/.claude/mcp.json` | `~/.claude/skills/<name>/` |
-| Cursor | `~/.cursor/` or project `.cursor/` | `~/.cursor/mcp.json` or `.cursor/mcp.json` | `~/.cursor/skills/` or `.cursor/rules/` |
-| Windsurf | `~/.codeium/windsurf/` | `~/.codeium/windsurf/mcp_config.json` | `~/.codeium/windsurf/skills/` |
-| Claude Desktop | OS config path | `claude_desktop_config.json` | N/A (MCP only) |
-| Zed | `~/.config/zed/` | `settings.json` (`context_servers`) | N/A (MCP only) |
-| Hermes Agent | `~/.hermes/` | `~/.hermes/mcp.json` | `~/.hermes/skills/` |
-| OpenClaw / Nanoclaw | `~/.openclaw/` or `~/.nanoclaw/` | `~/.openclaw/mcp.json` | `~/.openclaw/skills/` |
-| DeepSeek | `~/.deepseek/` | `~/.deepseek/mcp.json` | `~/.deepseek/skills/` |
-| Pi | `~/.pi/agent/` | `~/.pi/agent/mcp.json` | `~/.pi/agent/skills/` |
-| Devin | `~/.config/devin/` or `~/.devin/` | `~/.config/devin/mcp.json` | `~/.config/devin/skills/` |
-| Cline | VS Code global storage or `~/.cline/` | `cline_mcp_settings.json` | `~/.cline/skills/` or `.clinerules/` |
-| Roo Code | VS Code global storage or `~/.roo/` | `cline_mcp_settings.json` | `~/.roo/skills/` or `.roo/rules/` |
-| Continue | `~/.continue/` | `~/.continue/config.json` | `~/.continue/skills/` |
-| Goose | `~/.config/goose/` | `~/.config/goose/mcp.json` | `~/.goose/skills/` |
-| OpenHands | `~/.openhands/` | `~/.openhands/mcp.json` | `~/.openhands/skills/` |
-| Trae | `~/.trae/` | `~/.trae/mcp.json` | `~/.trae/skills/` |
-| Qwen Code | `~/.qwen/` | `~/.qwen/mcp.json` | `~/.qwen/skills/` |
-| Workspace (In-Repo) | Current directory | `./.mcp.json` | `./skills/<name>/` |
+`agentpx` detects installed agents automatically and routes MCP servers and skills to each agent's native directory:
+
+- **Core agents:** Google Antigravity, Claude Code, Cursor, Windsurf, Claude Desktop, Zed
+- **Autonomous agents:** Hermes, OpenClaw / Nanoclaw, DeepSeek, Pi, Devin
+- **Developer assistants:** Cline, Roo Code, Continue, Goose, OpenHands, Trae, Qwen Code
+- **Workspace:** Local project repositories (`.mcp.json` and `skills/`)
 
 ---
 
