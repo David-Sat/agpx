@@ -1,6 +1,6 @@
 {
   "name": "agentpx",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Universal AI agent plugin installer bridging skills, MCP servers, and harnesses",
   "type": "module",
   "bin": {
