@@ -7,7 +7,7 @@ import { displayBanner } from "./ui/prompts.js";
 const program = new Command();
 
 program
-  .name("agpx")
+  .name("agentpx")
   .description("Package manager for agent skills and MCP servers")
   .version("0.1.0");
 
