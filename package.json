@@ -4,9 +4,9 @@
   "description": "Universal AI agent plugin installer bridging skills, MCP servers, and harnesses",
   "type": "module",
   "bin": {
-    "agpx": "./dist/cli.js",
-    "agp": "./dist/cli.js",
-    "agent-plugins": "./dist/cli.js"
+    "agpx": "./bin/cli.mjs",
+    "agp": "./bin/cli.mjs",
+    "agent-plugins": "./bin/cli.mjs"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -47,8 +47,7 @@
   },
   "homepage": "https://github.com/David-Sat/agpx#readme",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "engines": {
     "node": ">=18.0.0"
