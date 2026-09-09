@@ -1,9 +1,10 @@
 {
-  "name": "agpx",
+  "name": "agentpx",
   "version": "0.1.0",
   "description": "Universal AI agent plugin installer bridging skills, MCP servers, and harnesses",
   "type": "module",
   "bin": {
+    "agentpx": "bin/cli.mjs",
     "agpx": "bin/cli.mjs",
     "agp": "bin/cli.mjs",
     "agent-plugins": "bin/cli.mjs"
