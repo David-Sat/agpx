@@ -1,0 +1,57 @@
+name: Release & Publish
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Release Please
+        id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # When a release PR is merged, or manually triggered, publish to npm
+      - name: Checkout repository
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        run: npm ci
+
+      - name: Build package
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        run: npm run build
+
+      - name: Run tests
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        run: npm test
+
+      - name: Publish to npm with Provenance
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'release' || steps.release.outputs.release_created }}
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,68 @@
+{
+  "name": "agpx",
+  "version": "0.1.0",
+  "description": "Universal AI agent plugin installer bridging skills, MCP servers, and harnesses",
+  "type": "module",
+  "bin": {
+    "agpx": "./dist/cli.js",
+    "agp": "./dist/cli.js",
+    "agent-plugins": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "agent-plugins",
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "claude-code",
+    "antigravity",
+    "cursor",
+    "windsurf",
+    "zed",
+    "skills"
+  ],
+  "author": "David Satomi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/David-Sat/agpx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/David-Sat/agpx/issues"
+  },
+  "homepage": "https://github.com/David-Sat/agpx#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "commander": "^13.1.0",
+    "picocolors": "^1.1.1",
+    "simple-git": "^3.27.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  }
+}
