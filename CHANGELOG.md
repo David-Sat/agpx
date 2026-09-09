@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/David-Sat/agpx/compare/agentpx-v0.3.0...agentpx-v0.3.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* update dependencies and finalize 0.3.0 release ([a431b98](https://github.com/David-Sat/agpx/commit/a431b987c9fbb11a73c2e2de6536233e0968aea3))
+
 ## [0.3.0](https://github.com/David-Sat/agpx/compare/agentpx-v0.2.0...agentpx-v0.3.0) (2026-09-09)
 
 
