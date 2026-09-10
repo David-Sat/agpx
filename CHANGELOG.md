@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/David-Sat/agpx/compare/agentpx-v0.3.1...agentpx-v0.4.0) (2026-09-10)
+
+
+### Features
+
+* add secure npm package plugin support with explicit npm: prefix ([61b51e5](https://github.com/David-Sat/agpx/commit/61b51e587422738c8735011eedb30308cd1c8890))
+
 ## [0.3.1](https://github.com/David-Sat/agpx/compare/agentpx-v0.3.0...agentpx-v0.3.1) (2026-09-09)
 
 
