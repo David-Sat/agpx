@@ -1,18 +1,37 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { execFile as execFileCallback } from "node:child_process";
+import { promisify } from "node:util";
 import { simpleGit, type SimpleGit } from "simple-git";
 import { expandHome, getAgpCacheDir } from "../utils/paths.js";
 
+const execFile = promisify(execFileCallback);
+
 export interface ParsedSource {
-  type: "local" | "git";
+  type: "local" | "git" | "npm";
   raw: string;
   url?: string;
   localPath?: string;
-  repoIdentifier: string; // e.g. "David-Sat/lux-edit" or local folder name
+  npmPackage?: string;
+  repoIdentifier: string; // e.g. "David-Sat/lux-edit" or "lux-edit"
 }
 
 export function parseSource(source: string, cwd: string = process.cwd()): ParsedSource {
   const trimmed = source.trim();
+
+  // Explicit npm package: npm:<package> or npm:@scope/package
+  if (trimmed.startsWith("npm:")) {
+    const pkgName = trimmed.slice(4).trim();
+    if (!pkgName) {
+      throw new Error("Invalid npm package source: package name cannot be empty");
+    }
+    return {
+      type: "npm",
+      raw: source,
+      npmPackage: pkgName,
+      repoIdentifier: pkgName
+    };
+  }
 
   // Local directory check
   if (
@@ -68,14 +87,13 @@ export function parseSource(source: string, cwd: string = process.cwd()): Parsed
     };
   }
 
-  // Check if it's a relative folder in cwd without ./ prefix
-  const potentialLocal = path.resolve(cwd, trimmed);
-  return {
-    type: "local",
-    raw: source,
-    localPath: potentialLocal,
-    repoIdentifier: path.basename(potentialLocal)
-  };
+  // Ambiguous bare string security check
+  throw new Error(
+    `Ambiguous plugin source '${trimmed}'.\n` +
+      `  • To install from GitHub, use owner/repo (e.g. 'David-Sat/${trimmed}')\n` +
+      `  • To install from npm, use the npm: prefix (e.g. 'npm:${trimmed}')\n` +
+      `  • To install from a local folder, use './' (e.g. './${trimmed}')`
+  );
 }
 
 export async function resolvePluginSource(
@@ -97,6 +115,57 @@ export async function resolvePluginSource(
       throw new Error(`Directory does not exist: ${parsed.localPath}`);
     }
     return { sourceDir: parsed.localPath, parsed };
+  }
+
+  // Explicit npm package: pack and extract securely
+  if (parsed.type === "npm") {
+    if (!parsed.npmPackage) {
+      throw new Error(`Invalid npm package source: ${source}`);
+    }
+
+    const cacheRoot = path.join(getAgpCacheDir(), "npm");
+    const safePkgDir = parsed.npmPackage.replace(/[^a-zA-Z0-9_.-]/g, "_");
+    const targetDir = path.join(cacheRoot, safePkgDir);
+    const tempPackDir = path.join(cacheRoot, `.temp_${safePkgDir}_${Date.now()}`);
+
+    await fs.mkdir(cacheRoot, { recursive: true });
+    await fs.mkdir(tempPackDir, { recursive: true });
+
+    try {
+      // Step 1: Pack the tarball from npm without executing scripts
+      const { stdout } = await execFile("npm", [
+        "pack",
+        parsed.npmPackage,
+        "--ignore-scripts",
+        "--pack-destination",
+        tempPackDir
+      ]);
+
+      const tarballName = stdout.trim().split("\n").pop()?.trim();
+      if (!tarballName) {
+        throw new Error(`Failed to download npm tarball for ${parsed.npmPackage}`);
+      }
+
+      const tarballPath = path.join(tempPackDir, tarballName);
+
+      // Step 2: Extract tarball safely (standard npm tarball extracts into 'package/')
+      await execFile("tar", ["-xzf", tarballPath, "-C", tempPackDir]);
+
+      const extractedPackageDir = path.join(tempPackDir, "package");
+      const stat = await fs.stat(extractedPackageDir);
+      if (!stat.isDirectory()) {
+        throw new Error(`Malformed npm package tarball for ${parsed.npmPackage}`);
+      }
+
+      // Step 3: Atomic move into target cache directory
+      await fs.rm(targetDir, { recursive: true, force: true });
+      await fs.rename(extractedPackageDir, targetDir);
+
+      return { sourceDir: targetDir, parsed };
+    } finally {
+      // Clean up temporary packing folder
+      await fs.rm(tempPackDir, { recursive: true, force: true });
+    }
   }
 
   // Remote Git repo: shallow clone to cache

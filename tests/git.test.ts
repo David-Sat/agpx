@@ -48,4 +48,24 @@ describe("Git & Source Parsing", () => {
     expect(res.type).toBe("local");
     expect(res.localPath).toBe("/absolute/path/to/plugin");
   });
+
+  it("should parse explicit npm: prefix", () => {
+    const res = parseSource("npm:lux-edit");
+    expect(res.type).toBe("npm");
+    expect(res.npmPackage).toBe("lux-edit");
+    expect(res.repoIdentifier).toBe("lux-edit");
+  });
+
+  it("should parse scoped npm package with npm: prefix", () => {
+    const res = parseSource("npm:@david-sat/lux-edit");
+    expect(res.type).toBe("npm");
+    expect(res.npmPackage).toBe("@david-sat/lux-edit");
+    expect(res.repoIdentifier).toBe("@david-sat/lux-edit");
+  });
+
+  it("should reject ambiguous bare identifier with helpful guidance", () => {
+    expect(() => parseSource("lux-edit")).toThrowError(
+      /Ambiguous plugin source 'lux-edit'/
+    );
+  });
 });

@@ -58,13 +58,17 @@ Target repository
 
 ```bash
 # GitHub shorthand
-npx agpx add David-Sat/lux-edit
+npx agentpx add David-Sat/lux-edit
+
+# Explicit npm package
+npx agentpx add npm:lux-edit
+npx agentpx add npm:@david-sat/lux-edit
 
 # Full Git URL
-npx agpx add https://github.com/David-Sat/lux-edit.git
+npx agentpx add https://github.com/David-Sat/lux-edit.git
 
 # Local folder
-npx agpx add ./my-local-plugin
+npx agentpx add ./my-local-plugin
 ```
 
 #### Options
@@ -79,14 +83,14 @@ npx agpx add ./my-local-plugin
 ### List Installed Plugins
 
 ```bash
-npx agpx list
-npx agpx list --project
+npx agentpx list
+npx agentpx list --project
 ```
 
 ### Update a Plugin
 
 ```bash
-npx agpx update lux-edit
+npx agentpx update lux-edit
 ```
 
 Fetches the latest commits from the original source and updates registered files.
@@ -94,7 +98,7 @@ Fetches the latest commits from the original source and updates registered files
 ### Remove a Plugin
 
 ```bash
-npx agpx remove lux-edit
+npx agentpx remove lux-edit
 ```
 
 Deletes registered MCP server keys and removes installed skill directories. Other configuration keys stay untouched.
